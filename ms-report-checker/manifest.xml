@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+           xsi:type="TaskPaneApp">
+
+  <Id>9e8b1d26-18a5-4c8b-a735-726d77777777</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Ulrich Pabst</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="MS Report Checker"/>
+  <Description DefaultValue="Real-time MS report analysis in Word."/>
+  
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://ulrichpabst.github.io/ms-report-checker/taskpane.html"/>
+  </DefaultSettings>
+
+  <Permissions>ReadWriteDocument</Permissions>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+                    xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Document">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
+          </GetStarted>
+          <FunctionFile resid="Commands.Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="Group1">
+                <Label resid="Group1.Label"/>
+                <Control xsi:type="Button" id="OpenPaneButton">
+                  <Label resid="OpenPaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="OpenPaneButton.Label"/>
+                    <Description resid="OpenPaneButton.Tooltip"/>
+                  </Supertip>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>ButtonId1</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+
+    <Resources>
+      <bt:Urls>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://ulrichpabst.github.io/ms-report-checker/"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://ulrichpabst.github.io/ms-report-checker/taskpane.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://ulrichpabst.github.io/ms-report-checker/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GetStarted.Title" DefaultValue="Start MS Report Checker"/>
+        <bt:String id="Group1.Label" DefaultValue="MS Report"/>
+        <bt:String id="OpenPaneButton.Label" DefaultValue="Check MS Data"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="Click the button to open the MS Report Checker."/>
+        <bt:String id="OpenPaneButton.Tooltip" DefaultValue="Analyze MS reports for validity."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>
