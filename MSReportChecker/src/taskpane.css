@@ -1,0 +1,117 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f6 !important;
+    color: #101010 !important;
+    margin: 0;
+    padding: 0;
+}
+
+#infoText {
+    padding: 10px 20px;
+}
+
+label {
+    display: block;
+    margin: 10px 0;
+}
+
+input[type="number"] {
+    width: 80px;
+    font-size: 14px;
+}
+
+#mainanalyzebutton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1cm 0;
+}
+
+#summary {
+    margin: 10px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid rgba(0, 0, 0, 0);
+    padding: 5px;
+    text-align: left;
+}
+
+th {
+    background-color: transparent;
+}
+
+td[title] {
+    cursor: pointer;
+}
+
+.tooltip-cell {
+    position: relative;
+    cursor: pointer;
+}
+
+#tooltip-box {
+    position: fixed;
+    background-color: rgba(50, 50, 50, 0.6);
+    color: #f5f5f6;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    max-width: 240px;
+    z-index: 9999;
+    pointer-events: none;
+    white-space: pre-wrap;
+    display: none;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Button */
+.button-6 {
+    align-items: center;
+    background-color: #80bf46;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.25rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+    box-sizing: border-box;
+    color: rgba(0, 0, 0, 1);
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 14px;
+    font-weight: 700;
+    justify-content: center;
+    line-height: 1.25;
+    margin: 0;
+    min-height: 3rem;
+    padding: calc(0.875rem - 1px) calc(1.5rem - 1px);
+    position: relative;
+    text-decoration: none;
+    transition: all 250ms;
+    user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    width: auto;
+}
+
+.button-6:hover,
+.button-6:focus {
+    background-color: #304c15;
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+    color: #ffffff;
+}
+
+.button-6:active {
+    background-color: #80bf46;
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+    color: #ffffff;
+}
