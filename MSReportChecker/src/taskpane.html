@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>MS Report Checker</title>
+        <script
+            type="text/javascript"
+            src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"
+        ></script>
+        <link rel="stylesheet" href="./taskpane.css" />
+    </head>
+    <body>
+        <div id="infoText">
+            <p>
+                This plugin helps to polish reported single-molecule HRMS
+                reports for adherence to ACS guidelines.<br />
+                Formatting inconsistencies and mass errors are detected and
+                reported.<br /><br />
+                This is a valid exemplary report with correct formatting:<br />
+                <strong>HRMS</strong> (ESI/Q-TOF) m/z: [M + Na]<sup>+</sup>
+                Calcd for C<sub>13</sub>H<sub>17</sub>NO<sub>3</sub>Na 258.1101;
+                Found 258.1074.
+            </p>
+        </div>
+
+        <label for="cutoffInput">
+            Tolerance:
+            <input
+                type="number"
+                id="cutoffInput"
+                value="0.0005"
+                step="0.0001"
+                min="0"
+            />
+            m/z
+        </label>
+
+        <div id="mainanalyzebutton">
+            <button id="analyzeButton" class="button-6" role="button">
+                Analyze Document
+            </button>
+        </div>
+
+        <div id="summary"></div>
+        <div id="results"></div>
+        <div id="tooltip-box"></div>
+
+        <script src="./taskpane.js"></script>
+    </body>
+</html>
