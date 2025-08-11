@@ -11,21 +11,9 @@
   --muted:#4a5568;
   --card:#ffffff;
   --accent:#3566e8;
-  --accent-ink:#0e1f55;
+  --accent-hover:#2d56c9;
   --line:#e5e9f2;
   --shadow:0 6px 24px rgba(16,24,40,.06),0 2px 8px rgba(16,24,40,.06);
-}
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#0f1623;
-    --fg:#e8edf6;
-    --muted:#a7b4c9;
-    --card:#121b2b;
-    --accent:#6aa1ff;
-    --accent-ink:#0d2a74;
-    --line:#1f2a40;
-    --shadow:none;
-  }
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -102,10 +90,8 @@ ol li{padding-left:.25rem;margin:.35rem 0}
   display:flex;
   gap:.9rem;
   align-items:flex-start;
-  border:1px solid color-mix(in oklab,var(--accent),#000 12%);
-  background:
-    radial-gradient(120px 120px at 0% 0%, color-mix(in oklab,var(--accent),#fff 85%) 0%, transparent 60%),
-    var(--card);
+  border:1px solid rgba(53,102,232,.25);
+  background:var(--card);
   padding:1rem 1.1rem;
   border-radius:14px;
   box-shadow:var(--shadow);
@@ -117,7 +103,7 @@ ol li{padding-left:.25rem;margin:.35rem 0}
   border-radius:9px;
   display:grid;
   place-items:center;
-  background:linear-gradient(180deg,color-mix(in oklab,var(--accent),#fff 10%),var(--accent));
+  background:var(--accent);
   color:#fff;
   font-weight:700;
   font-size:1rem;
@@ -138,22 +124,7 @@ a{
   text-decoration-thickness:1.5px;
 }
 a:where(:hover,:focus-visible){
-  color:color-mix(in oklab,var(--accent),#000 20%);
-}
-.button{
-  display:inline-flex;
-  align-items:center;
-  gap:.5rem;
-  padding:.62rem .9rem;
-  border-radius:10px;
-  background:var(--accent);
-  color:#fff;
-  font-weight:600;
-  text-decoration:none;
-  box-shadow:var(--shadow);
-}
-.button:where(:hover,:focus-visible){
-  background:color-mix(in oklab,var(--accent),#000 12%);
+  color:var(--accent-hover);
 }
 footer{
   text-align:center;
@@ -169,8 +140,7 @@ footer{
   }
 }
 @media (prefers-reduced-motion:no-preference){
-  a,.button{transition:color .15s ease, background-color .15s ease, transform .15s ease}
-  .button:active{transform:translateY(1px)}
+  a{transition:color .15s ease}
 }
 </style>
 </head>
@@ -216,8 +186,6 @@ footer{
     <h3>Additional instructions and troubleshooting</h3>
     <p>For advanced setup details, release notes, and support, visit the project page at
       <a href="https://github.com/ulrichpabst/MSReportChecker" rel="noopener">github.com/ulrichpabst/MSReportChecker</a>.
-      You can also open it directly:
-      <a class="button" href="https://github.com/ulrichpabst/MSReportChecker" rel="noopener" aria-label="Open MS Report Checker on GitHub">Open on GitHub</a>
     </p>
   </div>
 </section>
