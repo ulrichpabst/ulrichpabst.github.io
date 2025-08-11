@@ -25,6 +25,20 @@ body{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
 }
+body {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+.callout > div{min-width:0}
+.callout{overflow-wrap:anywhere; word-break:normal}
+.callout a{overflow-wrap:anywhere; word-break:break-word}
+
+.section code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 main{
   max-width:min(900px,92vw);
   margin:auto;
@@ -76,14 +90,14 @@ ol li{padding-left:.25rem;margin:.35rem 0}
 .qr img{
   width:min(220px,55vw);
   height:auto;
-  border-radius:0;
+  border-radius:0; /* sharp corners */
   border:1px solid var(--line);
   background:var(--card);
   box-shadow:var(--shadow);
 }
 
 .qr p{
-  margin-top:2.00rem;
+  margin-top:2.00rem; /* add more space to text */
   font-size:.95rem;
   color:var(--muted);
 }
