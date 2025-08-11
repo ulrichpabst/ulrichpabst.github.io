@@ -5,54 +5,225 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MS Report Checker – FMP Internal Installation</title>
 <style>
-html,body{margin:0;padding:0;font-family:"Segoe UI",Arial,sans-serif;background:#f5f7fa;color:#1e1e1e}
-main{max-width:800px;margin:auto;padding:4rem 1rem;text-align:center}
-h1{font-weight:600;font-size:2.2rem;margin:0 0 0.5rem}
-p.lead{font-size:1.1rem;margin:0 0 2.5rem}
-.qr{margin:2rem 0}
-ol{padding-left:1.4rem;text-align:left;margin:0 auto 2.5rem auto;max-width:650px;line-height:1.5}
-section{margin-bottom:3rem}
-footer{font-size:0.85rem;color:#555}
+:root{
+  --bg:#f5f7fa;
+  --fg:#1e1e1e;
+  --muted:#4a5568;
+  --card:#ffffff;
+  --accent:#3566e8;
+  --accent-ink:#0e1f55;
+  --line:#e5e9f2;
+  --shadow:0 6px 24px rgba(16,24,40,.06),0 2px 8px rgba(16,24,40,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0f1623;
+    --fg:#e8edf6;
+    --muted:#a7b4c9;
+    --card:#121b2b;
+    --accent:#6aa1ff;
+    --accent-ink:#0d2a74;
+    --line:#1f2a40;
+    --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--fg);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+main{
+  max-width:min(900px,92vw);
+  margin:auto;
+  padding:clamp(2rem,4vw,4rem) 1rem;
+}
+.header{
+  text-align:center;
+  margin-bottom:clamp(1.5rem,3vw,2.5rem);
+}
+h1{
+  margin:0 0 .5rem 0;
+  font-weight:650;
+  font-size:clamp(1.8rem,3.2vw,2.4rem);
+  letter-spacing:.2px;
+}
+p.lead{
+  margin:.25rem auto 2rem auto;
+  max-width:60ch;
+  font-size:clamp(1rem,1.5vw,1.125rem);
+  color:var(--muted);
+  line-height:1.55;
+}
+.section{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:clamp(1rem,2.2vw,1.5rem);
+  box-shadow:var(--shadow);
+  margin-bottom:clamp(1rem,2.2vw,1.5rem);
+}
+.section h2{
+  margin:.25rem 0 1rem 0;
+  font-size:clamp(1.2rem,2.1vw,1.4rem);
+  font-weight:620;
+  letter-spacing:.2px;
+}
+ol{
+  margin:0;
+  padding-left:1.2rem;
+  line-height:1.6;
+}
+ol li{padding-left:.25rem;margin:.35rem 0}
+.qr{
+  display:grid;
+  place-items:center;
+  gap:.5rem;
+  margin:clamp(.5rem,2vw,1.25rem) 0;
+}
+.qr img{
+  width:min(220px,55vw);
+  height:auto;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:var(--card);
+  box-shadow:var(--shadow);
+}
+.qr p{
+  margin:0;
+  font-size:.95rem;
+  color:var(--muted);
+}
+.callout{
+  display:flex;
+  gap:.9rem;
+  align-items:flex-start;
+  border:1px solid color-mix(in oklab,var(--accent),#000 12%);
+  background:
+    radial-gradient(120px 120px at 0% 0%, color-mix(in oklab,var(--accent),#fff 85%) 0%, transparent 60%),
+    var(--card);
+  padding:1rem 1.1rem;
+  border-radius:14px;
+  box-shadow:var(--shadow);
+}
+.badge{
+  flex:0 0 auto;
+  width:36px;
+  height:36px;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(180deg,color-mix(in oklab,var(--accent),#fff 10%),var(--accent));
+  color:#fff;
+  font-weight:700;
+  font-size:1rem;
+  letter-spacing:.2px;
+}
+.callout h3{
+  margin:.1rem 0 .25rem 0;
+  font-size:clamp(1.05rem,1.8vw,1.2rem);
+}
+.callout p{
+  margin:.1rem 0 0 0;
+  color:var(--muted);
+  line-height:1.55;
+}
+a{
+  color:var(--accent);
+  text-underline-offset:3px;
+  text-decoration-thickness:1.5px;
+}
+a:where(:hover,:focus-visible){
+  color:color-mix(in oklab,var(--accent),#000 20%);
+}
+.button{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.62rem .9rem;
+  border-radius:10px;
+  background:var(--accent);
+  color:#fff;
+  font-weight:600;
+  text-decoration:none;
+  box-shadow:var(--shadow);
+}
+.button:where(:hover,:focus-visible){
+  background:color-mix(in oklab,var(--accent),#000 12%);
+}
+footer{
+  text-align:center;
+  font-size:.9rem;
+  color:var(--muted);
+  margin-top:clamp(1rem,3vw,2rem);
+}
+@media (min-width:720px){
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:clamp(1rem,2vw,1.5rem);
+  }
+}
+@media (prefers-reduced-motion:no-preference){
+  a,.button{transition:color .15s ease, background-color .15s ease, transform .15s ease}
+  .button:active{transform:translateY(1px)}
+}
 </style>
 </head>
 <body>
 <main>
-<h1>Welcome to&nbsp;MS Report Checker</h1>
-<p class="lead">This page guides FMP employees through the internal installation of the Microsoft&nbsp;Word Add-in for Windows (Office 2021 or later).</p>
+<header class="header">
+  <h1>Welcome to&nbsp;MS Report Checker</h1>
+  <p class="lead">This page guides FMP employees through the internal installation of the Microsoft Word Add-in for Windows (Office&nbsp;2021 or later).</p>
+</header>
 
-<div class="qr">
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fulrichpabst.github.io%2FMSReportChecker%2F" alt="QR code linking to this page" width="200" height="200">
-<p>Scan to open this page on your device.</p>
+<section class="section">
+  <div class="qr">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https%3A%2F%2Fulrichpabst.github.io%2FMSReportChecker%2F" alt="QR code linking to this page">
+    <p>Scan to reopen this page on another device.</p>
+  </div>
+</section>
+
+<div class="grid">
+  <section class="section">
+    <h2>Part&nbsp;1 – Add the Trusted Catalog</h2>
+    <ol>
+      <li>Open Microsoft&nbsp;Word and select <em>File → Options</em>.</li>
+      <li>Choose <em>Trust Center</em>, then click <em>Trust Center Settings</em>.</li>
+      <li>Select <em>Trusted Catalogs for Add-Ins</em>. If required, enable <em>Add-in Catalogs</em>.</li>
+      <li>Click <em>Add Catalog</em>, enter <code>\\intra\AG\Office Templates\AddIns\MSReportChecker</code>, and tick <em>Show this Catalog</em>.</li>
+      <li>Confirm with <em>OK</em> in all windows.</li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <h2>Part&nbsp;2 – Install the Add-in</h2>
+    <ol>
+      <li>In Word, open <em>Insert → Add-ins → My Add-ins</em>.</li>
+      <li>Switch to the <em>Manage: Add-in Catalog</em> tab.</li>
+      <li>Select <strong>MS Report Checker</strong> and press <em>Add</em> or <em>Install</em>.</li>
+    </ol>
+  </section>
 </div>
 
-<section>
-<h2>Part&nbsp;1 – Add the Trusted&nbsp;Catalog</h2>
-<ol>
-<li>Open Microsoft&nbsp;Word and select&nbsp;<em>File → Options</em>.</li>
-<li>Choose <em>Trust Center</em> on the left, then click <em>Trust Center&nbsp;Settings</em>.</li>
-<li>Select <em>Trusted Catalogs&nbsp;for Add-Ins</em>. If required, enable <em>Add-in Catalogs</em>.</li>
-<li>Click <em>Add Catalog</em>, enter the path&nbsp;<code>\\intra\AG\Office Templates\AddIns\MSReportChecker</code>, and tick <em>Show this Catalog</em>.</li>
-<li>Confirm with <em>OK</em> in all open windows.</li>
-</ol>
+<section class="section callout" aria-label="Additional resources">
+  <div class="badge">i</div>
+  <div>
+    <h3>Additional instructions and troubleshooting</h3>
+    <p>For advanced setup details, release notes, and support, visit the project page at
+      <a href="https://github.com/ulrichpabst/MSReportChecker" rel="noopener">github.com/ulrichpabst/MSReportChecker</a>.
+      You can also open it directly:
+      <a class="button" href="https://github.com/ulrichpabst/MSReportChecker" rel="noopener" aria-label="Open MS Report Checker on GitHub">Open on GitHub</a>
+    </p>
+  </div>
 </section>
 
-<section>
-<h2>Part&nbsp;2 – Install the Add-in</h2>
-<ol>
-<li>In Word, open <em>Insert → Add-ins → My Add-ins</em>.</li>
-<li>Switch to the <em>Manage: Add-in Catalog</em> tab.</li>
-<li>Select <strong>MS Report Checker</strong> and press <em>Add</em> or <em>Install</em>.</li>
-</ol>
-</section>
-
-<section>
-<ol>
-<li>For additional instructions, visit https://github.com/ulrichpabst/MSReportChecker</li>
-</ol>
-</section>
-  
 <footer>
-© 2025 Ulrich Pabst, FMP. Hosted via GitHub Pages.
+  © 2025 Ulrich Pabst, FMP. Hosted via GitHub Pages.
 </footer>
 </main>
 </body>
