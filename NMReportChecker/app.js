@@ -68,18 +68,31 @@ function convolve(pattern, letter, Jppm) {
 }
 
 function parseBody(body) {
-  let s = body.toLowerCase().trim();
-  const isb = s.indexOf('br') > -1;
-  s = s.replace(/br/g, '').trim();
+  const raw = body.trim();
+  let s = raw.toLowerCase();
+
+  const hasBr = /\bbr\b/.test(s);
+  const hasM  = /\bm\b/.test(s);
+
+  s = s.replace(/\bbr\b/g, '').trim();
+
   const mh = s.match(/\b((?:\d+(?:\.\d+)?)|\.\d+)\s*h\b/i);
   const nH = mh ? parseFloat(mh[1]) : 1;
+
+  if (hasM) {
+    return { seq: ['s'], Js: [], nH, isb: true, multRaw: 'm' };
+  }
+
   let seq = ['s'];
-  const mcombo = s.match(/(?:^|[^a-z])([sdthqp]+)(?=(?:[,\s]|$|j\b|\d+h\b))/);
-  if (mcombo) seq = mcombo[1].split('');
+  const mcombo = s.match(/(?:^|[^a-z])([sdthqp]+)(?=(?:[,\s]|$|j\b|\d+h\b))/i);
+  if (mcombo) seq = mcombo[1].toLowerCase().split('');
+
   let Js = [];
   const jf = s.match(/j\s*=\s*((?:\d+(?:\.\d+)?\s*,\s*)*\d+(?:\.\d+)?)\s*hz/i);
   if (jf) Js = jf[1].split(',').map(x => parseFloat(x.trim()));
-  return { seq, Js, nH, isb };
+
+  const multRaw = (hasBr ? 'br ' : '') + seq.join('');
+  return { seq, Js, nH, isb: hasBr, multRaw };
 }
 
 function ensureJs(seq, Js) {
@@ -105,7 +118,7 @@ function parseNMR(text) {
     const center = ps[0];
     const halfw = ps[1];
     const pb = parseBody(body);
-    entries.push({ center, halfw, seq: pb.seq, Js: pb.Js, nH: pb.nH, isb: pb.isb });
+    entries.push({ center, halfw, seq: pb.seq, Js: pb.Js, nH: pb.nH, isb: pb.isb, multRaw: pb.multRaw });
   }
   return { MHz, solvent, entries };
 }
@@ -265,6 +278,10 @@ function hsum(entries) {
   return s;
 }
 
+function multStringFromEntry(e) {
+  return e.multRaw || (e.isb ? ('br ' + e.seq.join('')) : e.seq.join(''));
+}
+
 function buildTable(entries, solvent) {
   const tbody = document.getElementById('sig-tbody');
   tbody.innerHTML = "";
@@ -272,25 +289,22 @@ function buildTable(entries, solvent) {
   const impIdx = [];
 
   entries.forEach((e, idx) => {
-    const multi = e.isb ? ("br " + e.seq.join('')) : e.seq.join('');
-    const id = likelyIdentity(e.center, multi, solvent);
+    const multForDisplay = e.multRaw || (e.isb ? ("br " + e.seq.join('')) : e.seq.join(''));
+    const multForMatch   = multForDisplay;
+
+    const id = likelyIdentity(e.center, multForMatch, solvent);
     const tr = document.createElement('tr');
-    if (id.isImp) {
-      tr.classList.add('impurity');
-      impCount++;
-      impIdx.push(idx);
-    }
+    if (id.isImp) { tr.classList.add('impurity'); impCount++; impIdx.push(idx); }
     tr.dataset.idx = idx.toString();
 
-    const mult = e.isb ? ("br " + e.seq.join('')) : e.seq.join('');
     const Js = e.Js.length ? e.Js.map(v => v.toFixed(1)).join(", ") : "—";
     const ident = id.isImp ? `<span class="badge imp">IMP</span> ${id.label}` : id.label;
 
     tr.innerHTML = `
       <td>${e.center.toFixed(2)}</td>
-      <td>${mult}</td>
+      <td>${multForDisplay}</td>
       <td>${Js}</td>
-      <td>${(Math.round(e.nH * 100) / 100).toString()}</td>
+      <td>${(Math.round(e.nH*100)/100).toString()}</td>
       <td>${ident}</td>
     `;
     tr.addEventListener('click', () => selectSignal(idx));
