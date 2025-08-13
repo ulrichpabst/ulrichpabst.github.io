@@ -402,7 +402,7 @@ function pxB(){ return PAD.B * dpr }
 
   window.addEventListener('resize', () => { draw(); });
 
-  const LINE_W = Math.max(2.5, Math.round(1 * dpr));
+  const LINE_W = Math.max(1.5, Math.round(1 * dpr));
 
   let data = null;
   let xrange = [15, -1];
@@ -696,7 +696,7 @@ function drawBands() {
       const x2 = xToPix(b[1]);
       ov.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--impA').trim() || "rgba(245,158,11,0.12)";
       ov.fillRect(Math.min(x1, x2), pxT(), Math.abs(x2 - x1), baseline - pxT());
-      ov.strokeStyle = "rgba(245,158,11,0.0)";
+      ov.strokeStyle = "rgba(245,158,11,0.2)";
       ov.lineWidth = 1 * dpr;
       ov.strokeRect(Math.min(x1, x2), pxT(), Math.abs(x2 - x1), baseline - pxT());
     }
@@ -707,7 +707,7 @@ function drawBands() {
     const x2 = xToPix(selBand[1]);
     ov.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--selA').trim() || "rgba(34,197,94,0.12)";
     ov.fillRect(Math.min(x1, x2), pxT(), Math.abs(x2 - x1), baseline - pxT());
-    ov.strokeStyle = "rgba(34,197,94,0.0)";
+    ov.strokeStyle = "rgba(34,197,94,0.2)";
     ov.lineWidth = 1 * dpr;
     ov.strokeRect(Math.min(x1, x2), pxT(), Math.abs(x2 - x1), baseline - pxT());
   }
