@@ -655,7 +655,7 @@ function drawBands() {
       const x2 = xToPix(b[1]);
       ov.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--impA').trim() || "rgba(245,158,11,0.12)";
       ov.fillRect(Math.min(x1, x2), pxT(), Math.abs(x2 - x1), baseline - pxT());
-      ov.strokeStyle = "#f59e0b";
+      ov.strokeStyle = "rgba(245,158,11,0.0)";
       ov.lineWidth = 1 * dpr;
       ov.strokeRect(Math.min(x1, x2), pxT(), Math.abs(x2 - x1), baseline - pxT());
     }
