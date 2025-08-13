@@ -71,7 +71,7 @@ function parseBody(body) {
   let s = body.toLowerCase().trim();
   const isb = s.indexOf('br') > -1;
   s = s.replace(/br/g, '').trim();
-  const mh = s.match(/\b(\d+)h\b/);
+  const mh = s.match(/\b((?:\d+(?:\.\d+)?)|\.\d+)\s*h\b/i);
   const nH = mh ? parseFloat(mh[1]) : 1;
   let seq = ['s'];
   const mcombo = s.match(/(?:^|[^a-z])([sdthqp]+)(?=(?:[,\s]|$|j\b|\d+h\b))/);
@@ -290,7 +290,7 @@ function buildTable(entries, solvent) {
       <td>${e.center.toFixed(2)}</td>
       <td>${mult}</td>
       <td>${Js}</td>
-      <td>${e.nH}</td>
+      <td>${(Math.round(e.nH * 100) / 100).toString()}</td>
       <td>${ident}</td>
     `;
     tr.addEventListener('click', () => selectSignal(idx));
