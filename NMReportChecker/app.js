@@ -2,6 +2,31 @@ let lastGamma = 0.0003;
 let hoverPpm = null;
 const BASELINE_OFFSET = 0.04;
 
+const SOLVENT_ALIASES = {
+  "CDCl3":   ["cdcl3","chloroform-d","chloroformd","chcl3"],
+  "DMSO-d6": ["dmso-d6","dmsod6","dmso","dimethylsulfoxide","dimethyl sulfoxide"],
+  "MeOD-d4": ["meod-d4","meodd4","meod","cd3od","methanol-d4","methanold4"],
+  "D2O":     ["d2o","heavywater","deuteriumoxide","deuterium oxide"]
+};
+
+const SOLVENT_CANON = new Map();
+for (const [canon, forms] of Object.entries(SOLVENT_ALIASES)) {
+  SOLVENT_CANON.set(canon.toLowerCase().replace(/[^a-z0-9]/g, ''), canon);
+  for (const f of forms) SOLVENT_CANON.set(f.toLowerCase().replace(/[^a-z0-9]/g, ''), canon);
+}
+
+function normalizeSolventName(s) {
+  if (!s) return null;
+  const parts = s.split(/[\/,;|]/);
+  for (const p of parts) {
+    const key = p.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const canon = SOLVENT_CANON.get(key);
+    if (canon) return canon;
+  }
+  const all = s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return SOLVENT_CANON.get(all) || s.trim();
+}
+
 function parseFrequency(text) {
   const m = text.match(/\((\d+(?:\.\d+)?)\s*MHz/i);
   return m ? parseFloat(m[1]) : 400;
@@ -108,8 +133,10 @@ function ensureJs(seq, Js) {
 
 function parseNMR(text) {
   const MHz = parseFrequency(text);
-  const solvent = parseSolvent(text);
+  const solventRaw = parseSolvent(text);
+  const solvent = normalizeSolventName(solventRaw);
   const raw = splitEntries(text);
+
   const entries = [];
   for (let k = 0; k < raw.length; k++) {
     const shiftField = raw[k][0];
@@ -120,7 +147,7 @@ function parseNMR(text) {
     const pb = parseBody(body);
     entries.push({ center, halfw, seq: pb.seq, Js: pb.Js, nH: pb.nH, isb: pb.isb, multRaw: pb.multRaw });
   }
-  return { MHz, solvent, entries };
+  return { MHz, solvent, solventRaw, entries };
 }
 
 function simulateSpectrum(text, ppmMin, ppmMax, points, gammaBase) {
