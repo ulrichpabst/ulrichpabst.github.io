@@ -98,7 +98,7 @@ html[data-theme="dark"] .theme-toggle__expand .cut{
 
 
 body{display:flex;flex-direction:column;overflow:hidden}
-.app{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding-bottom:16px, width:1400px}
+.app{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding-bottom:16px;width:1400px}
 
 .controls{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
 .controls textarea{
