@@ -2,6 +2,11 @@ let lastGamma = 0.0003;
 let hoverPpm = null;
 const BASELINE_OFFSET = 0.04;
 
+// Put ~99.9% of a Lorentzian inside the reported range [center ± halfw]
+const RANGE_AREA_FRAC = 0.90;
+const RANGE_K = Math.tan(RANGE_AREA_FRAC * Math.PI / 2);  // ≈ 636.62
+const MIN_GAMMA = 1e-6;                                   // ppm, numerical floor
+
 const SOLVENT_ALIASES = {
   "CDCl3":   ["cdcl3","chloroform-d","chloroformd","chcl3"],
   "DMSO-d6": ["dmso-d6","dmsod6","dmso","dimethylsulfoxide","dimethyl sulfoxide"],
@@ -50,13 +55,16 @@ function splitEntries(text) {
 
 function parseShifts(s) {
   s = s.trim().replace(/–/g, '-');
-  if (s.indexOf('-') > -1) {
-    const parts = s.split('-');
-    const A = parseFloat(parts[0]);
-    const B = parseFloat(parts[1]);
-    return [0.5 * (A + B), Math.abs(A - B) / 2];
+  const m = s.match(/^(-?\d+(?:\.\d+)?)\s*-\s*(-?\d+(?:\.\d+)?)/);
+  if (m) {
+    const A = parseFloat(m[1]);
+    const B = parseFloat(m[2]);
+    const lo = Math.min(A, B);
+    const hi = Math.max(A, B);
+    return { center: 0.5 * (A + B), halfw: (hi - lo) / 2, lo, hi, isRange: true };
   }
-  return [parseFloat(s), 0];
+  const v = parseFloat(s);
+  return { center: v, halfw: 0, lo: v, hi: v, isRange: false };
 }
 
 function pascal(letter) {
@@ -142,10 +150,14 @@ function parseNMR(text) {
     const shiftField = raw[k][0];
     const body = raw[k][1];
     const ps = parseShifts(shiftField);
-    const center = ps[0];
-    const halfw = ps[1];
-    const pb = parseBody(body);
-    entries.push({ center, halfw, seq: pb.seq, Js: pb.Js, nH: pb.nH, isb: pb.isb, multRaw: pb.multRaw });
+const pb = parseBody(body);
+entries.push({
+  center: ps.center,
+  halfw: ps.halfw,
+  range: ps.isRange ? [ps.lo, ps.hi] : null,
+  isRange: ps.isRange,
+  seq: pb.seq, Js: pb.Js, nH: pb.nH, isb: pb.isb, multRaw: pb.multRaw
+});
   }
   return { MHz, solvent, solventRaw, entries };
 }
@@ -170,15 +182,30 @@ function simulateSpectrum(text, ppmMin, ppmMax, points, gammaBase) {
     if (!e.seq || e.seq.length === 0) continue;
 
     const Jsppm = ensureJs(e.seq, e.Js).map(J => J / MHz);
-    let pat = [[e.center, 1]];
-    for (let j = 0; j < e.seq.length; j++) pat = convolve(pat, e.seq[j], Jsppm[j]);
+
+let pat;
+const isRange = e.halfw > 0;
+const looksLikeMultiplet = (e.multRaw && /\bm\b/i.test(e.multRaw)) || e.isb;
+
+if (isRange && looksLikeMultiplet) {
+  const N = 1;
+  pat = [];
+  for (let k = 0; k < N; k++) {
+    const t = (N === 1) ? 0 : (k / (N - 1)) * 2 - 1; // [-1..1]
+    pat.push([e.center + t * e.halfw, 1 / N]);
+  }
+} else {
+  pat = [[e.center, 1]];
+}
+
+for (let j = 0; j < e.seq.length; j++) {
+  pat = convolve(pat, e.seq[j], Jsppm[j]);
+}
 
     let tot = 0;
     for (let j = 0; j < pat.length; j++) tot += pat[j][1];
 
-    let g = gammaBase;
-    if (e.halfw > 0) g = Math.max(g, e.halfw);
-    if (e.isb) g *= 20;
+    const g = signalGamma(e, gammaBase);
 
     for (let j = 0; j < pat.length; j++) {
       const pos = pat[j][0];
@@ -328,7 +355,7 @@ function buildTable(entries, solvent) {
     const ident = id.isImp ? `<span class="badge imp">IMP</span> ${id.label}` : id.label;
 
     tr.innerHTML = `
-      <td>${e.center.toFixed(2)}</td>
+      <td>${e.isRange ? `${e.range[0].toFixed(2)}–${e.range[1].toFixed(2)}` : e.center.toFixed(2)}</td>
       <td>${multForDisplay}</td>
       <td>${Js}</td>
       <td>${(Math.round(e.nH*100)/100).toString()}</td>
@@ -349,13 +376,19 @@ function setStats(entries, imp, solvent, MHz) {
 }
 
 function signalGamma(e, g0) {
+  if (e.halfw > 0) {
+    const gFromRange = e.halfw / RANGE_K;
+    return Math.max(gFromRange, MIN_GAMMA);
+  }
   let g = g0;
-  if (e.halfw > 0) g = Math.max(g, e.halfw);
   if (e.isb) g *= 20;
   return g;
 }
 
 function signalBand(e, MHz, g0) {
+    if (e.isRange && e.range) {
+    return [e.range[0], e.range[1]];
+  }
   const Jsppm = ensureJs(e.seq, e.Js).map(J => J / MHz);
   let pat = [[e.center, 1]];
   for (let j = 0; j < e.seq.length; j++) pat = convolve(pat, e.seq[j], Jsppm[j]);
@@ -402,7 +435,7 @@ function pxB(){ return PAD.B * dpr }
 
   window.addEventListener('resize', () => { draw(); });
 
-  const LINE_W = Math.max(1.5, Math.round(1 * dpr));
+  const LINE_W = Math.max(2.5, Math.round(1 * dpr));
 
   let data = null;
   let xrange = [15, -1];
@@ -696,7 +729,7 @@ function drawBands() {
       const x2 = xToPix(b[1]);
       ov.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--impA').trim() || "rgba(245,158,11,0.12)";
       ov.fillRect(Math.min(x1, x2), pxT(), Math.abs(x2 - x1), baseline - pxT());
-      ov.strokeStyle = "rgba(245,158,11,0.2)";
+      ov.strokeStyle = "rgba(245,158,11,0.0)";
       ov.lineWidth = 1 * dpr;
       ov.strokeRect(Math.min(x1, x2), pxT(), Math.abs(x2 - x1), baseline - pxT());
     }
@@ -707,7 +740,7 @@ function drawBands() {
     const x2 = xToPix(selBand[1]);
     ov.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--selA').trim() || "rgba(34,197,94,0.12)";
     ov.fillRect(Math.min(x1, x2), pxT(), Math.abs(x2 - x1), baseline - pxT());
-    ov.strokeStyle = "rgba(34,197,94,0.2)";
+    ov.strokeStyle = "rgba(34,197,94,0.0)";
     ov.lineWidth = 1 * dpr;
     ov.strokeRect(Math.min(x1, x2), pxT(), Math.abs(x2 - x1), baseline - pxT());
   }
