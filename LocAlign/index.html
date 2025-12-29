@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocAlign</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">
+                <h1>LOC<span>ALIGN</span></h1>
+            </div>
+        </div>
+
+        <div class="sidebar-content">
+            <div class="control-group">
+                <div class="header-row">
+                    <label>REFERENCE</label>
+                    <span class="badge">Multi-FASTA</span>
+                </div>
+                <textarea id="reference" placeholder="> fragment&#10;ATGC..."></textarea>
+            </div>
+
+            <div class="control-group">
+                <div class="header-row">
+                    <label>QUERY</label>
+                    <span class="badge">Multi-FASTA</span>
+                </div>
+                <textarea id="query" placeholder="> Read_01&#10;ATGC...&#10;&#10;> Read_02&#10;GCTA..."></textarea>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+    <button id="circularBtn" class="mode-toggle">Circular OFF</button>
+    <button id="alignBtn">Run Alignment</button>
+</div>
+    </aside>
+
+    <main class="results-panel">
+        <div class="results-header">
+            <h2>ALIGNMENT LOG</h2>
+            <button id="copyAllBtn" class="secondary-btn">Copy Report</button>
+        </div>
+        
+        <div id="output-container" class="output-container">
+            <div class="empty-state">
+                <p></p>
+                <p class="sub"></p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="program.js"></script>
+</body>
+</html>
