@@ -104,7 +104,7 @@ function runAllAlignments() {
         return;
     }
 
-    let globalReport = `ALIGNMENT JOB REPORT\nGenerated: ${new Date().toLocaleString()}\n\n`;
+    let globalReport = `LOCAL ALIGNMENT JOB REPORT\nGenerated   :  ${new Date().toLocaleString()}\n\n`;
 
     for (const refObj of refs) {
         for (const queryObj of queries) {
