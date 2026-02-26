@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GelStack</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="appicon" aria-hidden="true">GS</div>
+      <div class="appname">GelStack</div>
+    </div>
+
+    <div class="topactions">
+      <button id="btnFit" class="btn">Fit</button>
+      <button id="btnClear" class="btn ghost">Clear</button>
+
+      <div class="divider"></div>
+
+      <label class="field">
+        <span>Export name</span>
+        <input id="exportName" type="text" value="gel_overlay" />
+      </label>
+
+      <button id="btnExport" class="btn primary">Export PNG</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel" aria-label="Layers panel">
+      <div class="panelHeader">
+        <div class="panelTitle">Layers</div>
+        <div class="panelMeta" id="layerCount">0</div>
+      </div>
+
+      <div class="panelBody">
+        <div id="layers" class="layers" aria-label="Layer list"></div>
+
+        <!-- Background (always at bottom, not reorderable) -->
+        <div class="bgCard" aria-label="Background">
+          <div class="bgHead">
+            <div class="bgTitle">Background</div>
+          </div>
+
+          <div class="bgBody">
+            <div class="seg" role="group" aria-label="Background mode">
+              <button class="segBtn isOn" id="bgBlack" type="button">Black</button>
+              <button class="segBtn" id="bgTransparent" type="button">Transparent</button>
+              <button class="segBtn" id="bgColor" type="button">Color</button>
+            </div>
+
+            <div class="bgColorRow" id="bgColorRow">
+              <input type="color" id="bgColorPick" value="#000000" aria-label="Background color"/>
+              <input type="text" id="bgColorHex" value="#000000" spellcheck="false" aria-label="Background hex"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="panelFoot">
+          <div class="note">
+            Exposure is in EV (stops): EV +1 doubles brightness, EV −1 halves it. Auto maximizes entropy with clipping penalty.
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <section class="stage" id="dropzone" tabindex="0" aria-label="Drop images here">
+      <div class="stageTop">
+        <div class="hint">
+          <div class="hintTitle">Drop images</div>
+          <div class="hintSub">PNG · JPG · TIFF. Drag layers to reorder. Drag on canvas to align.</div>
+        </div>
+        <div class="stageActions">
+          <button id="btnPick" class="btn">Add…</button>
+          <input id="filePicker" type="file" accept=".png,.jpg,.jpeg,.tif,.tiff,image/png,image/jpeg,image/tiff" multiple hidden />
+        </div>
+      </div>
+
+      <div class="canvasWrap">
+        <canvas id="canvas"></canvas>
+        <div class="hud">
+          <span class="pill">Drag: move</span>
+          <span class="pill">Wheel: scale</span>
+          <span class="pill">Shift+Wheel: rotate</span>
+          <span class="pill">Alt+Drag: pan</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.min.js"></script>
+  <script src="program.js"></script>
+</body>
+</html>
