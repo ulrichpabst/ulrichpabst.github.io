@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ulrich Pabst — Projects</title>
+    <meta
+      name="description"
+      content="A small index of web apps hosted on ulrichpabst.github.io"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="wrap header">
+      <div class="brand">
+        <div class="title">ulrichpabst.github.io</div>
+        <div class="subtitle">Projects hosted on this domain</div>
+      </div>
+
+      <div class="right">
+        <a
+          class="link"
+          href="https://github.com/ulrichpabst"
+          target="_blank"
+          rel="noreferrer"
+          >GitHub</a
+        >
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="hero">
+        <h1>Apps</h1>
+        <p>Click a card to open a project.</p>
+
+        <div class="search">
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search projects…"
+            autocomplete="off"
+          />
+          <span class="count" id="resultCount"></span>
+        </div>
+      </section>
+
+      <section id="cardGrid" class="grid" aria-label="Projects"></section>
+
+      <footer class="footer">
+        <span class="muted"
+          >press <span class="mono">/</span> to focus search,
+          <span class="mono">Esc</span> to clear.</span
+        >
+        <span class="muted">Ulrich Pabst <span id="year"></span></span>
+      </footer>
+    </main>
+
+    <script src="./program.js"></script>
+  </body>
+</html>
