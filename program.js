@@ -6,7 +6,7 @@ const PROJECTS = [
     summary:
       "Microsoft Word add-in to validate HRMS reports and enforce consistency with minimal friction.",
     status: "stable",
-    keywords: ["word", "office", "add-in", "report"],
+    keywords: [],
   },
   {
     id: "NMReportChecker",
@@ -14,8 +14,8 @@ const PROJECTS = [
     path: "/NMReportChecker/",
     summary:
       "Instant visualization of 1D-NMR reports into spectra with multiplicities, integrals, J-couplings, etc.",
-    status: "experimental",
-    keywords: ["web", "report"],
+    status: "stable",
+    keywords: [],
   },
   {
     id: "GelStack",
@@ -23,8 +23,8 @@ const PROJECTS = [
     path: "/GelStack/",
     summary:
       "Layer-based image overlay for gels: stack, reorder, and export clean composites.",
-    status: "stable",
-    keywords: ["gel", "imaging", "overlay", "figure"],
+    status: "experimental",
+    keywords: [],
   },
   {
     id: "LocAlign",
@@ -33,7 +33,7 @@ const PROJECTS = [
     summary:
       "Local Alignment of multiple biological sequences.",
     status: "stable",
-    keywords: ["align", "utility"],
+    keywords: [],
   },
 ];
 
